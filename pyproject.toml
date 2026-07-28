@@ -1,0 +1,66 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fragapi"
+description = "Async & Sync API client for FragAPI"
+version = "0.1.0"
+readme = "README.md"
+authors = [{ name = "apelsynca", email = "apelsynca@proton.me" }]
+maintainers = [{ name = "apelsynca", email = "apelsynca@proton.me" }]
+requires-python = ">=3.10"
+license = "MIT"
+dependencies = ["aiohttp>=3.14.3", "pydantic>=2.13.4"]
+keywords = [
+  "AsyncIO",
+  "TON",
+  "SDK",
+  "FragAPI",
+  "Fragment",
+  "crypto",
+  "blockchain",
+]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Framework :: AsyncIO",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Homepage = "https://github.com/apelsynca/fragapi-python"
+Examples = "https://github.com/apelsynca/fragapi-python/tree/main/examples/"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+extend-select = [
+  "I",
+  "UP",
+  "T20",
+  "B039",
+  "PT",
+  "RUF022",
+  "RUF023",
+  "RUF10",  # RUF10x
+  "RUF20",  # RUF200
+]
+ignore = ["F841"]
+
+[dependency-groups]
+dev = ["ruff>=0.16.0"]
+test = ["pytest>=9.1.1", "pytest-asyncio>=1.4.0", "pytest-mock>=3.15.1"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
