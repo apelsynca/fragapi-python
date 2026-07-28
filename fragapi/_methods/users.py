@@ -1,18 +1,10 @@
 from typing import TYPE_CHECKING
 
 from fragapi._methods.base import FragAPIMethod
-from fragapi.types import FragAPIObject
+from fragapi.types import FragUser
 
 if TYPE_CHECKING:
     from fragapi._typing import ClientProtocol
-
-
-class FragUser(FragAPIObject):
-    id: int
-    balance: float
-    first_name: str
-    last_name: str | None
-    username: str | None
 
 
 class GetMe:
