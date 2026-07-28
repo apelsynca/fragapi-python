@@ -5,6 +5,7 @@ from aiohttp import ClientResponse
 from aiohttp.http import SERVER_SOFTWARE
 
 from fragapi.__meta__ import __version__
+from fragapi._methods.users import GetMe
 from fragapi.client import FragAPI
 
 
@@ -30,9 +31,10 @@ async def test_get_me_and_calls_with_right_data(
     assert me.last_name is None
     assert me.username == "synca"
 
+    # Todo: test that separatelly
     client_session_mock.request.assert_awaited_once_with(
         method="GET",
-        url=f"{client.base_url}/get_me",
+        url=f"{client.base_url}/{GetMe.GetMeMethod.__method__}",
         headers={
             "Authorization": f"Bearer {client._token}",
             "Content-Type": "application/json",

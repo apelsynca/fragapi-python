@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 _Self = TypeVar("_Self", bound="FragAPI")
 
-DEFAULT_BASE_URL = "https://api/fragapi.com/v1"
+DEFAULT_BASE_URL = "https://api.fragapi.com/v1"
 
 
 class FragAPI(Methods):
@@ -43,7 +43,7 @@ class FragAPI(Methods):
         exc_val: BaseException | None,
         exc_tb: types.TracebackType | None,
     ) -> None:
-        return
+        await self.session.close()
 
     async def __call__(self, method: "FragAPIMethod[_FragAPIType]") -> "_FragAPIType":
         response = await self.session.request(
