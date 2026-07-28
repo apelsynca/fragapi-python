@@ -13,9 +13,25 @@ if TYPE_CHECKING:
 
 _Self = TypeVar("_Self", bound="FragAPI")
 
+DEFAULT_BASE_URL = "https://api/fragapi.com/v1"
+
 
 class FragAPI(Methods):
-    def __init__(self, session: aiohttp.ClientSession | None = None) -> None:
+    def __init__(
+        self,
+        token: str,
+        *,
+        base_url: str = DEFAULT_BASE_URL,
+        session: aiohttp.ClientSession | None = None,
+    ) -> None:
+        if not token or not isinstance(token, str):
+            raise TypeError("API token (api_token) must be a non-empty string.")
+
+        if not token.startswith("fg_"):
+            raise ValueError("Invalid API token format. Tokens must start with 'fg_'.")
+
+        self._token = token
+        self.base_url = base_url.rstrip("/")
         self.session = session if session else aiohttp.ClientSession()
 
     async def __aenter__(self) -> _Self:
@@ -30,11 +46,16 @@ class FragAPI(Methods):
         return
 
     async def __call__(self, method: "FragAPIMethod[_FragAPIType]") -> "_FragAPIType":
-        return await self.session.request(
+        response = await self.session.request(
             method="GET",
-            url=f"https://api.fragapi.com/v1/{method.__method__}",
+            url=f"{self.base_url}/{method.__method__}",
             headers={
+                "Authorization": f"Bearer {self._token}",
                 "Content-Type": "application/json",
                 "User-Agent": f"{SERVER_SOFTWARE} fragapi/{__version__}",
             },
         )
+
+        json = await response.json()
+
+        return method.__return_type__.model_validate(json)
