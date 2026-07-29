@@ -1,7 +1,9 @@
-import aiohttp
 import pytest
+from pytest_mock import MockerFixture
 
 from fragapi import FragAPI
+from fragapi._methods.users import GetMe
+from fragapi.session.aiohttp import AiohttpSession
 
 
 def test_raises_wrong_token() -> None:
@@ -21,6 +23,10 @@ async def test_inits_session() -> None:
 
 
 @pytest.mark.asyncio
-async def test_available_in_context_manager() -> None:
-    async with FragAPI(token="fg_SomeSmallLenghtToken") as client:
-        assert isinstance(client.session, aiohttp.ClientSession)
+async def test_client_call_calls_session(mocker: MockerFixture) -> None:
+    fragapi = FragAPI(token="fg_SomeSmallLenghtToken")
+    session_mock = mocker.patch.object(fragapi, "session", spec=AiohttpSession)
+
+    await fragapi(method=GetMe.GetMeMethod())
+
+    session_mock.request.assert_called_once_with(client=fragapi, method=GetMe.GetMeMethod())

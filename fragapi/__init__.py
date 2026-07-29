@@ -1,9 +1,4 @@
-from .__meta__ import __version__
+from .__meta__ import __fragapi_version__, __version__
 from .client import FragAPI
 
-
-def hello() -> str:
-    return "Hello from fragapi-python!"
-
-
-__all__ = ["FragAPI", "__version__", "hello"]
+__all__ = ["FragAPI", "__fragapi_version__", "__version__"]
