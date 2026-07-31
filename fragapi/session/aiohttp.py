@@ -1,4 +1,5 @@
 import ssl
+import string
 from typing import TYPE_CHECKING
 
 import certifi
@@ -25,9 +26,22 @@ class AiohttpSession(BaseSession):
                 ssl=ssl_context,
             ),
         ) as session:
+            raw_data = method.model_dump(exclude_none=True, by_alias=True)
+
+            formatter = string.Formatter()
+            keys_for_url = [
+                field_name
+                for _, field_name, _, _ in formatter.parse(method.__method__)
+                if field_name is not None
+            ]
+            url_fill_data = {key: raw_data.pop(key) for key in keys_for_url if key in raw_data}
+            url = f"{client.base_url}/{method.__method__.format(**url_fill_data)}"
+
             response = await session.request(
-                method="GET",
-                url=f"{client.base_url}/{method.__method__}",
+                method=method.__request_method__,
+                params=raw_data if method.__request_method__ == "GET" and raw_data else None,
+                json=raw_data if method.__request_method__ != "GET" else None,
+                url=url,
                 headers={
                     "Authorization": f"Bearer {client._token}",
                     "Content-Type": "application/json",

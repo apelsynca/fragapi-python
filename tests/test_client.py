@@ -2,7 +2,7 @@ import pytest
 from pytest_mock import MockerFixture
 
 from fragapi import FragAPI
-from fragapi._methods.users import GetMe
+from fragapi._methods.get_me import GetMe
 from fragapi.session.aiohttp import AiohttpSession
 
 

@@ -12,5 +12,5 @@ class GetMe:
         __return_type__ = FragUser
         __method__ = "users/me"
 
-    async def get_me(self: "ClientProtocol"):
+    async def get_me(self: "ClientProtocol") -> FragUser:
         return await self(self.GetMeMethod())
