@@ -5,7 +5,6 @@ build-backend = "hatchling.build"
 [project]
 name = "fragapi"
 description = "Async & Sync API client for FragAPI"
-version = "0.4.0"
 readme = "README.md"
 authors = [{ name = "apelsynca", email = "apelsynca@proton.me" }]
 maintainers = [{ name = "apelsynca", email = "apelsynca@proton.me" }]
@@ -35,6 +34,10 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
   "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+dynamic = ["version"]
+
+[tool.hatch.version]
+path = "fragapi/__meta__.py"
 
 [project.urls]
 Homepage = "https://github.com/apelsynca/fragapi-python"

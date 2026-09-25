@@ -15,10 +15,7 @@ _FragAPIType = TypeVar(
 class FragAPIObject(BaseModel):
     _client: "FragAPI" = PrivateAttr()
 
-    model_config = ConfigDict(
-        alias_generator=to_camel,
-        extra="allow",
-    )
+    model_config = ConfigDict(alias_generator=to_camel, extra="allow", populate_by_name=True)
 
 
 __all__ = ["FragAPIObject", "_FragAPIType"]
