@@ -2,8 +2,10 @@ from typing import Annotated
 
 from pydantic import UUID4, Field
 
+from fragapi.types.base import FragAPIObject
 
-class BaseBuyResponse:
+
+class BaseBuyResponse(FragAPIObject):
     message_hash: str
     transaction_id: UUID4
     name: str
