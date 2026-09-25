@@ -21,12 +21,9 @@ class AiohttpSession(BaseSession):
     ) -> "_FragAPIType":
         ssl_context = ssl.create_default_context(cafile=certifi.where())
         async with ClientSession(
-            timeout=ClientTimeout(self.timeout),
-            connector=TCPConnector(
-                ssl=ssl_context,
-            ),
+            timeout=ClientTimeout(self.timeout), connector=TCPConnector(ssl=ssl_context)
         ) as session:
-            raw_data = method.model_dump(exclude_none=True, by_alias=True)
+            raw_data = method.model_dump(exclude_none=True, by_alias=False)
 
             formatter = string.Formatter()
             keys_for_url = [

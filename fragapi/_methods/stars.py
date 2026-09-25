@@ -17,15 +17,6 @@ class Stars:
         __return_type__ = StarsRecipient
         __method__ = "stars/recipient/{username}"
 
-    class BuyStars(FragAPIMethod):
-        username: str
-        quantity: int = Field(ge=50, le=10_000_000)
-        show_sender: bool | None = None
-
-        __return_type__ = BuyStarsResponse
-        __method__ = "stars/buy"
-        __request_method__ = "POST"
-
     async def get_stars_recipient(
         self: "ClientProtocol", *, username: str, quantity: int | None = None
     ) -> StarsRecipient:
@@ -41,12 +32,20 @@ class Stars:
         :param quantity: *Optional* Number of stars to buy pinned to the recipient search.
         :return: :class:`fragapi.types.StarsRecipient` object.
         """
-
         return await self(self.GetStarsRecipient(username=username, quantity=quantity))
+
+    class BuyStars(FragAPIMethod):
+        username: str
+        quantity: int = Field(ge=50, le=10_000_000)
+        show_sender: bool | None = None
+
+        __return_type__ = BuyStarsResponse
+        __method__ = "stars/buy"
+        __request_method__ = "POST"
 
     async def buy_stars(
         self: "ClientProtocol", *, username: str, quantity: int, show_sender: bool = False
-    ):
+    ) -> BuyStarsResponse:
         """
         stars/buy method.
 
@@ -60,7 +59,6 @@ class Stars:
         :param show_sender: *Optional*. Whether show sender of the stars to the recipient.
         :return: :class:`fragapi.types.BuyStarsResponse` object.
         """
-
         return await self(
             self.BuyStars(username=username, quantity=quantity, show_sender=show_sender)
         )

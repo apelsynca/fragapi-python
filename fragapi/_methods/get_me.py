@@ -13,4 +13,9 @@ class GetMe:
         __method__ = "users/me"
 
     async def get_me(self: "ClientProtocol") -> FragUser:
+        """
+        Get info about FragAPI user
+
+        Source: https://docs.fragapi.com/ru/docs/api/users/get_api_user_me
+        """
         return await self(self.GetMeMethod())

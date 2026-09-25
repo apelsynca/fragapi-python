@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from pydantic import ValidationError
+from pydantic import TypeAdapter, ValidationError
 
 from fragapi.exceptions import DeserializationError
 
@@ -40,7 +40,7 @@ class BaseSession(ABC):
         # TODO: content -> ['error']
 
         try:
-            response = method.__return_type__.model_validate_json(  # type: ignore[name-defined]
+            response = TypeAdapter(method.__return_type__).validate_json(
                 content,
                 context={"client": client},
             )
@@ -50,6 +50,4 @@ class BaseSession(ABC):
                 "Failed to deserialize object",
             ) from e
 
-        # if isinstance(response.result, ItemsList):
-        #     response.result = response.result.items
         return response

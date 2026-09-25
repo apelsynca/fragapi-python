@@ -14,15 +14,6 @@ class Premium:
         __return_type__ = PremiumRecipient
         __method__ = "premium/recipient/{username}"
 
-    class BuyPremium(FragAPIMethod):
-        username: str
-        months: Literal[3, 6, 12]
-        show_sender: bool | None = None
-
-        __return_type__ = BuyPremiumResponse
-        __method__ = "premium/buy"
-        __request_method__ = "POST"
-
     async def get_premium_recipient(
         self: "ClientProtocol", *, username: str, quantity: int | None = None
     ) -> PremiumRecipient:
@@ -37,8 +28,16 @@ class Premium:
         :param username: Username of the premium recipient. For example: `synca`.
         :return: :class:`fragapi.types.PremiumRecipient` object.
         """
-
         return await self(self.GetPremiumRecipient(username=username, quantity=quantity))
+
+    class BuyPremium(FragAPIMethod):
+        username: str
+        months: Literal[3, 6, 12]
+        show_sender: bool | None = None
+
+        __return_type__ = BuyPremiumResponse
+        __method__ = "premium/buy"
+        __request_method__ = "POST"
 
     async def buy_premium(
         self: "ClientProtocol",
@@ -46,7 +45,7 @@ class Premium:
         username: str,
         months: Literal[3, 6, 12],
         show_sender: bool = False,
-    ):
+    ) -> BuyPremiumResponse:
         """
         premium/buy method.
 
@@ -60,7 +59,6 @@ class Premium:
         :param show_sender: *Optional*. Whether show sender of the premium to the recipient.
         :return: :class:`fragapi.types.BuyPremiumResponse` object.
         """
-
         return await self(
             self.BuyPremiumResponse(username=username, months=months, show_sender=show_sender)
         )

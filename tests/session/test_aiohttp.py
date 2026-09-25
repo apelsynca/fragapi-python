@@ -8,7 +8,7 @@ from fragapi._methods.base import FragAPIMethod
 from fragapi.client import FragAPI
 from fragapi.exceptions import DeserializationError
 from fragapi.session.aiohttp import AiohttpSession
-from fragapi.types.base import FragAPIObject
+from fragapi.types import FragAPIObject
 from tests.conftest import get_aiohttp_response_session_mock
 
 # When resp is -> {"error":"Unauthorized","detail":"Unauthorized"}
