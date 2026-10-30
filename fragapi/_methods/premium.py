@@ -60,5 +60,5 @@ class Premium:
         :return: :class:`fragapi.types.BuyPremiumResponse` object.
         """
         return await self(
-            self.BuyPremiumResponse(username=username, months=months, show_sender=show_sender)
+            self.BuyPremium(username=username, months=months, show_sender=show_sender)
         )
