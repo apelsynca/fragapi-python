@@ -31,3 +31,49 @@ async def main() -> None:
 if __name__ == "__main__":
     asyncio.run(main())
 ```
+
+## Methods
+
+All methods are async and live on the `FragAPI` client.
+
+| Area         | Methods                                                                                 |
+| ------------ | --------------------------------------------------------------------------------------- |
+| User         | `get_me`                                                                                |
+| Stars        | `get_stars_recipient`, `buy_stars`                                                      |
+| Premium      | `get_premium_recipient`, `buy_premium`                                                  |
+| Gifts        | `get_collection_gift_model_names`, `get_collection_gift_models`, `get_gift_model`       |
+| Deposits     | `request_ton_deposit`, `request_ton_deposit_via_memo`, `list_deposits`                  |
+| Transactions | `list_transactions`                                                                     |
+
+Top up your balance by sending TON to the returned address, with either a base64 payload or a plain text memo:
+
+```
+deposit = await fragapi.request_ton_deposit(amount=1.5)
+print(deposit.address, deposit.amount, deposit.payload)
+
+deposit = await fragapi.request_ton_deposit_via_memo(amount=1.5)
+print(deposit.address, deposit.amount, deposit.memo)
+```
+
+List methods are paginated and return `.items` and `.pagination`:
+
+```
+from fragapi.types import TransactionsSorting
+
+transactions = await fragapi.list_transactions(
+    page=1, limit=10, sorting=[TransactionsSorting.amount_desc]
+)
+for transaction in transactions.items:
+    print(transaction.amount, transaction.reason)
+print(transactions.pagination.max_page)
+```
+
+Gift models can be sorted by floor price:
+
+```
+from fragapi.types import GiftModelsSorting
+
+models = await fragapi.get_collection_gift_models(
+    "plushpepe", sorting=[GiftModelsSorting.floor]
+)
+```

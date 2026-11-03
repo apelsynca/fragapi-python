@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from fragapi._methods.base import FragAPIMethod
-from fragapi.types import GiftModel
+from fragapi.types import GiftModel, GiftModelsSorting
 
 if TYPE_CHECKING:
     from fragapi._typing import ClientProtocol
@@ -22,17 +22,27 @@ class Gifts:
 
     class GetCollectionGiftModelsMethod(FragAPIMethod):
         short_name: str
+        sorting: list[GiftModelsSorting] | None = None
 
         __return_type__ = list[GiftModel]
         __method__ = "gifts/{short_name}/models"
 
     async def get_collection_gift_models(
-        self: "ClientProtocol", short_name: str
+        self: "ClientProtocol",
+        short_name: str,
+        *,
+        sorting: list[GiftModelsSorting] | None = None,
     ) -> list[GiftModel]:
         """
         https://docs.fragapi.com/ru/docs/api/gifts/get_collection_models
+
+        :param short_name: Short name of the gift collection.
+        :param sorting: *Optional*. Sorting criteria, applied in order. API defaults to
+            highest floor first.
         """
-        return await self(self.GetCollectionGiftModelsMethod(short_name=short_name))
+        return await self(
+            self.GetCollectionGiftModelsMethod(short_name=short_name, sorting=sorting)
+        )
 
     class GetGiftModelMethod(FragAPIMethod):
         short_name: str

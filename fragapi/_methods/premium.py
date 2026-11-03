@@ -14,9 +14,7 @@ class Premium:
         __return_type__ = PremiumRecipient
         __method__ = "premium/recipient/{username}"
 
-    async def get_premium_recipient(
-        self: "ClientProtocol", *, username: str, quantity: int | None = None
-    ) -> PremiumRecipient:
+    async def get_premium_recipient(self: "ClientProtocol", *, username: str) -> PremiumRecipient:
         """
         premium/recipient/ method.
 
@@ -28,7 +26,7 @@ class Premium:
         :param username: Username of the premium recipient. For example: `synca`.
         :return: :class:`fragapi.types.PremiumRecipient` object.
         """
-        return await self(self.GetPremiumRecipient(username=username, quantity=quantity))
+        return await self(self.GetPremiumRecipient(username=username))
 
     class BuyPremium(FragAPIMethod):
         username: str

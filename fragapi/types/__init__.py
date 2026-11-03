@@ -7,7 +7,7 @@ from fragapi.types.deposit import (
     TonDeposit,
     TonMemoDeposit,
 )
-from fragapi.types.gifts import GiftModel
+from fragapi.types.gifts import GiftModel, GiftModelsSorting
 from fragapi.types.pagination import ListResource, Pagination
 from fragapi.types.recipient import PremiumRecipient, StarsRecipient
 from fragapi.types.transactions import TonTransaction, Transaction, TransactionsSorting
@@ -22,6 +22,7 @@ __all__ = [
     "FragAPIObject",
     "FragUser",
     "GiftModel",
+    "GiftModelsSorting",
     "ListResource",
     "Pagination",
     "PremiumRecipient",

@@ -8,7 +8,7 @@ from yarl import URL
 from fragapi import FragAPI
 from fragapi._methods import Methods
 from fragapi.session.aiohttp import AiohttpSession
-from fragapi.types import DepositsSorting, DepositStatus, TransactionsSorting
+from fragapi.types import DepositsSorting, DepositStatus, GiftModelsSorting, TransactionsSorting
 from tests.conftest import get_aiohttp_response_session_mock
 
 PAGINATION = {"totalCount": 1, "maxPage": 1}
@@ -124,6 +124,22 @@ async def test_buy_sends_show_sender_in_camel_case(
     kwargs = http.request.await_args.kwargs
     assert kwargs["url"] == f"https://api.fragapi.com/v1/{path}"
     assert kwargs["json"] == {"username": "synca", "showSender": True, **size}
+
+
+@pytest.mark.asyncio
+async def test_gift_models_sorting(mocker: MockerFixture) -> None:
+    client, http = make_client(
+        mocker,
+        [{"name": "Frog", "floor": 1.5, "count": 3, "imageUrl": "u"}],  # type: ignore[arg-type]
+    )
+
+    models = await client.get_collection_gift_models("plushpepe", sorting=[GiftModelsSorting.floor])
+
+    assert models[0].image_url == "u"
+
+    kwargs = http.request.await_args.kwargs
+    assert kwargs["url"] == "https://api.fragapi.com/v1/gifts/plushpepe/models"
+    assert kwargs["params"] == {"sorting": ["floor"]}
 
 
 @pytest.mark.asyncio
