@@ -23,16 +23,18 @@ class AiohttpSession(BaseSession):
         async with ClientSession(
             timeout=ClientTimeout(self.timeout), connector=TCPConnector(ssl=ssl_context)
         ) as session:
-            raw_data = method.model_dump(exclude_none=True, by_alias=False)
-
             formatter = string.Formatter()
-            keys_for_url = [
+            keys_for_url = {
                 field_name
                 for _, field_name, _, _ in formatter.parse(method.__method__)
                 if field_name is not None
-            ]
-            url_fill_data = {key: raw_data.pop(key) for key in keys_for_url if key in raw_data}
+            }
+            # URL templates use field names, while the API expects aliases everywhere else
+            url_fill_data = {key: getattr(method, key) for key in keys_for_url}
             url = f"{client.base_url}/{method.__method__.format(**url_fill_data)}"
+            raw_data = method.model_dump(
+                mode="json", exclude=keys_for_url, exclude_none=True, by_alias=True
+            )
 
             response = await session.request(
                 method=method.__request_method__,
