@@ -1,5 +1,11 @@
 from fragapi.types.base import FragAPIObject, _FragAPIType
-from fragapi.types.buy import BuyPremiumResponse, BuyStarsResponse
+from fragapi.types.buy import (
+    BulkBuyStarsItemResult,
+    BulkBuyStarsResponse,
+    BulkPurchaseStatus,
+    BuyPremiumResponse,
+    BuyStarsResponse,
+)
 from fragapi.types.deposit import (
     Deposit,
     DepositsSorting,
@@ -14,6 +20,9 @@ from fragapi.types.transactions import TonTransaction, Transaction, Transactions
 from fragapi.types.user import FragUser
 
 __all__ = [
+    "BulkBuyStarsItemResult",
+    "BulkBuyStarsResponse",
+    "BulkPurchaseStatus",
     "BuyPremiumResponse",
     "BuyStarsResponse",
     "Deposit",

@@ -39,7 +39,7 @@ All methods are async and live on the `FragAPI` client.
 | Area         | Methods                                                                                 |
 | ------------ | --------------------------------------------------------------------------------------- |
 | User         | `get_me`                                                                                |
-| Stars        | `get_stars_recipient`, `buy_stars`                                                      |
+| Stars        | `get_stars_recipient`, `buy_stars`, `buy_stars_bulk`, `get_buy_stars_bulk`, `wait_buy_stars_bulk` |
 | Premium      | `get_premium_recipient`, `buy_premium`                                                  |
 | Gifts        | `get_collection_gift_model_names`, `get_collection_gift_models`, `get_gift_model`       |
 | Deposits     | `request_ton_deposit`, `request_ton_deposit_via_memo`, `list_deposits`                  |
@@ -53,6 +53,22 @@ print(deposit.address, deposit.amount, deposit.payload)
 
 deposit = await fragapi.request_ton_deposit_via_memo(amount=1.5)
 print(deposit.address, deposit.amount, deposit.memo)
+```
+
+Bulk stars purchases return right away; wait for the results (or poll `get_buy_stars_bulk` yourself):
+
+```
+from fragapi import FragAPI
+
+bulk = await fragapi.buy_stars_bulk(
+    items=[
+        FragAPI.BuyStars(username="synca", quantity=50),
+        FragAPI.BuyStars(username="durov", quantity=100, show_sender=True),
+    ]
+)
+bulk = await fragapi.wait_buy_stars_bulk(id=bulk.id)
+for item in bulk.items:
+    print(item.username, item.result or item.error)
 ```
 
 List methods are paginated and return `.items` and `.pagination`:

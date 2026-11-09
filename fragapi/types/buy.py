@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Annotated
 
 from pydantic import UUID4, Field
@@ -19,3 +20,24 @@ class BuyStarsResponse(BaseBuyResponse):
 
 class BuyPremiumResponse(BaseBuyResponse):
     pass
+
+
+class BulkPurchaseStatus(str, Enum):
+    pending = "pending"
+    charged = "charged"
+    done = "done"
+
+
+class BulkBuyStarsItemResult(FragAPIObject):
+    username: str
+    quantity: int
+    result: BuyStarsResponse | None = None
+    error: Annotated[str | None, Field(description="Why this item was not bought")] = None
+
+
+class BulkBuyStarsResponse(FragAPIObject):
+    id: UUID4
+    status: BulkPurchaseStatus
+    items: Annotated[
+        list[BulkBuyStarsItemResult], Field(description="Results in the requested order")
+    ]
